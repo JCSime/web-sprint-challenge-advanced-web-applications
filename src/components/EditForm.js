@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useHistory } from "react-router-dom";
 import axiosWithAuth from '../utils/axiosWithAuth';
 
 const initialArticle = {
@@ -12,26 +11,28 @@ const initialArticle = {
 };
 
 const EditForm = (props)=> {
-    const { push } = useHistory();
     const [article, setArticle]  = useState(initialArticle);
     const {handleEdit, handleEditCancel, editId} = props;
 
+    
+    useEffect(() =>{
+        axiosWithAuth().get(`/articles/${editId}`)
+        .then(res => {
+            setArticle(res.data)
+        })
+        .catch(err=>{console.log(err)})
+    }, [])
     const handleChange = (e)=> {
         setArticle({
             ...article,
             [e.target.name]: e.target.value
         })
+
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axiosWithAuth()
-        .post('/articles', article)
-        .then(resp=> {
-            console.log(resp);
-            setArticles(resp.data);
-            push('/view')
-        }).catch(err=>{console.log(err);});
+        handleEdit(article);
     }
 
 
@@ -58,7 +59,7 @@ const EditForm = (props)=> {
             <label>Body</label>
             <input value={article.body} id="body" name="body" onChange={handleChange}/>
         </div>
-        <Button id="editButton" onClick={handleSubmit}>Edit Article</Button>
+        <Button id="editButton">Edit Article</Button>
         <Button onClick={handleCancel}>Cancel</Button>
     </FormContainer>);
 }
