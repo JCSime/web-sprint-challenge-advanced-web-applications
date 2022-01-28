@@ -1,22 +1,29 @@
 import React from 'react';
-import { Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import styled from 'styled-components';
+import PrivateRoute from './PrivateRoute';
 
 import Header from './Header';
 import BloomHeader from './BloomHeader';
 import Login from './Login';
+import View from './View';
 
 const App = () => {
   return (
-    <AppContainer>
-      <BloomHeader/>
-      <Header/>
-      <RouteContainer>
-        <Route exact path="/">
-          <Login/>
-        </Route>          
-      </RouteContainer>
-    </AppContainer>
+    <Router>
+      <AppContainer>
+        <BloomHeader/>
+        <Header/>
+        <RouteContainer>
+          <Switch>
+            <PrivateRoute exact path="/view" component={View} />
+            <Route exact path="/">
+              <Login/>
+            </Route>   
+          </Switch>       
+        </RouteContainer>
+      </AppContainer>
+    </Router>
   )
 }
 
