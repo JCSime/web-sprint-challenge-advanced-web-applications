@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from "react-router-dom";
+import axiosWithAuth from '../utils/axiosWithAuth';
 
 const initialArticle = {
     id:"",
@@ -10,6 +12,7 @@ const initialArticle = {
 };
 
 const EditForm = (props)=> {
+    const { push } = useHistory();
     const [article, setArticle]  = useState(initialArticle);
     const {handleEdit, handleEditCancel, editId} = props;
 
@@ -22,7 +25,11 @@ const EditForm = (props)=> {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleEdit(article);
+        axiosWithAuth()
+        .post('/articles', article)
+        .then(resp=> {
+            push('/view')
+        }).catch(err=>{console.log(err);});
     }
 
 

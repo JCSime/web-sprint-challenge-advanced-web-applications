@@ -7,6 +7,8 @@ import Header from './Header';
 import BloomHeader from './BloomHeader';
 import Login from './Login';
 import View from './View';
+import EditForm from './EditForm';
+import Logout from './Logout';
 
 const App = () => {
   return (
@@ -16,10 +18,11 @@ const App = () => {
         <Header/>
         <RouteContainer>
           <Switch>
+          <PrivateRoute exact path="/edit" component={EditForm} />
+          <PrivateRoute exact path="/logout" component={Logout} />
             <PrivateRoute exact path="/view" component={View} />
-            <Route exact path="/">
-              <Login/>
-            </Route>   
+            <Route exact path="/login" component={Login} /> 
+            <Route path="/" component={Login} />
           </Switch>       
         </RouteContainer>
       </AppContainer>

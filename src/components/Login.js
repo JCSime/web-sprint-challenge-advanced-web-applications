@@ -3,60 +3,69 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 class Login extends React.Component {
-  state = {
-    credentials: {
-      username: '',
-      password: ''
+    state = {
+        credentials: {
+        username: '',
+        password: ''
+        }
+    };
+
+    handleChange = e => {
+        this.setState({
+        credentials: {
+            ...this.state.credentials,
+            [e.target.name]: e.target.value
+        }
+        });
+    };
+
+    login = e => {
+        e.preventDefault();
+        axios.post('http://localhost:5000/api/login', this.state.credentials)
+        .then(resp=> {
+            localStorage.setItem("token", resp.data.token);
+            localStorage.setItem("role", resp.data.role);
+            localStorage.setItem("username", resp.data.username);
+            this.props.history.push('/view');
+        })
+        .catch(err=> {
+        console.log(err);
+        });
+    };
+
+    render() {
+        return (
+            <ComponentContainer>
+                <ModalContainer>
+                    <h1>Welcome to Blogger Pro</h1>
+                    <h2>Please enter your account information.</h2>
+                    <div>
+                        <form onSubmit={this.login} className='FormGroup'>
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            value={this.state.credentials.username}
+                            onChange={this.handleChange}
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            value={this.state.credentials.password}
+                            onChange={this.handleChange}
+                        />
+                        <button id="submit">Submit</button>
+                        </form>
+                        <p id="error"></p>
+                    </div>
+                </ModalContainer>
+        </ComponentContainer>
+        );
     }
-  };
-
-  handleChange = e => {
-    this.setState({
-      credentials: {
-        ...this.state.credentials,
-        [e.target.name]: e.target.value
-      }
-    });
-  };
-
-  login = e => {
-    e.preventDefault();
-    console.log(this.state.credentials);
-  };
-
-  render() {
-    return (
-        <ComponentContainer>
-            <ModalContainer>
-                <h1>Welcome to Blogger Pro</h1>
-                <h2>Please enter your account information.</h2>
-                <div>
-                    <form onSubmit={this.login}>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        value={this.state.credentials.username}
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        value={this.state.credentials.password}
-                        onChange={this.handleChange}
-                    />
-                    <button>Log in</button>
-                    </form>
-                    <p id="error"></p>
-                </div>
-            </ModalContainer>
-      </ComponentContainer>
-    );
-  }
 }
 
-export default Login;
+    export default Login;
 
 //Task List
 //1. Build login form DOM from scratch, making use of styled components if needed. Make sure the username input has id="username" and the password input as id="password".
