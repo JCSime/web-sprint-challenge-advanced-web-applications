@@ -28,6 +28,8 @@ const EditForm = (props)=> {
         axiosWithAuth()
         .post('/articles', article)
         .then(resp=> {
+            console.log(resp);
+            setArticles(resp.data);
             push('/view')
         }).catch(err=>{console.log(err);});
     }
@@ -56,7 +58,7 @@ const EditForm = (props)=> {
             <label>Body</label>
             <input value={article.body} id="body" name="body" onChange={handleChange}/>
         </div>
-        <Button id="editButton">Edit Article</Button>
+        <Button id="editButton" onClick={handleSubmit}>Edit Article</Button>
         <Button onClick={handleCancel}>Cancel</Button>
     </FormContainer>);
 }
