@@ -22,7 +22,7 @@ const View = (props) => {
         axiosWithAuth()
         .delete(`/articles/${id}`)
         .then(resp=>{
-            console.log(resp);
+            setArticles(resp.data);
         }).catch(err=>{console.log(err);});
     }
 
